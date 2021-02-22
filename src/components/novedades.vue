@@ -41,7 +41,6 @@ export default {
       console.log(this.carrito);
       console.log(producto);
       for (var chart of this.carrito) {
-              console.log(chart.email);
         if (
           chart.email == this.user.data.email &&
           chart.idProduct == producto.id
@@ -56,7 +55,8 @@ export default {
             this.$notify({title: 'Añadir al carrito',type: 'error', text: 'No hay más stock disponible. Ya tienes el máximo número de artículos posible en el carrito.'})
         }else{
           db.collection("Carrito").doc(this.cesta.id).update({
-            cantidad: this.cesta.cantidad + 1,
+            cantidad: parseFloat(this.cesta.cantidad) + 1,
+            precioTotal: (parseFloat(this.cesta.cantidad) + 1) * parseFloat(producto.Precio),
             producto
           });
           this.$notify({title: 'Añadir al carrito',type: 'success', text: 'Has añadido un producto al carrito.'})
@@ -66,6 +66,7 @@ export default {
           email: this.user.data.email,
           idProduct: producto.id,
           cantidad: 1,
+          precioTotal: parseFloat(producto.Precio),
           producto
           });
           this.$notify({title: 'Añadir al carrito',type: 'success', text: 'Has añadido un producto al carrito.'})

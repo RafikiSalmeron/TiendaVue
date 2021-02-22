@@ -92,9 +92,12 @@ export default {
       if (user) {
         this.user.loggedIn = true;
         this.user.data = user;
+        console.log(this.user.loggedIn);
+        //console.log(Firebase.auth.currentUser);
       } else {
         this.user.loggedIn = false;
         this.user.data = {};
+        console.log(this.user.loggedIn);
       }
     });
   },

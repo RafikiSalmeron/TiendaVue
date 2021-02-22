@@ -30,7 +30,7 @@ export default {
       const provider = new firebase.auth.FacebookAuthProvider();
       firebase.auth().signInWithPopup(provider)
       .then(() =>{
-        this.$notify({title: 'Inicio de Sesión',type: 'success', text: 'Se ha iniciado sesión con google. '})
+        this.$notify({title: 'Inicio de Sesión',type: 'success', text: 'Se ha iniciado sesión. '})
         this.$router.push({name:'home'})
       })
       .catch(function(error){
@@ -40,7 +40,7 @@ export default {
     logout() {
       firebase.auth().signOut()
       .then(() =>{
-        this.$notify({title: 'Inicio de Sesión', type: 'warn', text: 'Se ha iniciado sesión con google. '})
+        this.$notify({title: 'Inicio de Sesión', type: 'error', text: 'Se ha cerrado sesión. '})
       })
       .catch(function(error) {
         console.log(error)});
