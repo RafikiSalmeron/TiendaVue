@@ -28,8 +28,7 @@ Vue.component(Chart)
 import Admin from './components/admin.vue'
 Vue.component(Admin)
 
-import Test from './components/test.vue'
-Vue.component(Test)
+
 
 const routes = [
   { path: '/', name: 'home', component: Home },
@@ -37,7 +36,6 @@ const routes = [
   { path: '/chart', name: 'chart', component: Chart },
   { path: '/admin', name: 'admin', component: Admin },
   { path: '/register', name: 'register', component: Register },
-  { path: '/test', name: 'test', component: Test }
 ]
 
 const router = new VueRouter({

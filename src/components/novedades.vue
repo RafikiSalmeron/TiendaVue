@@ -142,54 +142,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../scss/abstract/_mixins.scss";
-@import "../scss/abstract/_variables.scss";
-
-h2 {
-  margin: 2rem;
-
-}
-.noved-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  .noved-card {
-    border: 1px solid black;
-    width: 400px;
-    margin: 0;
-    margin: 2rem;
-    padding: 1rem;
-    background-color: rgba(12, 12, 12, 0.747);
-    border-radius: 8px;
-    color: white;
-    &:hover{
-      transform: scale(1.1);
-    }
-    img {
-      width: 200px;
-      height: 180px;
-      &:hover{
-        transform: rotate(-20deg);
-      }
-    }
-    .bold {
-      font-weight: bold;
-    }
-    .precio {
-      font-size: 2rem;
-            background-color: rgba(0, 0, 0, 0.397);
-      border-radius: 8px;
-    }
-    .btnAddChart {
-      font-size: 2rem;
-      background-color: rgb(255, 255, 255);
-      border-radius: 8px;
-      border: none;
-      &:hover {
-        transform: scale(1.1);
-      }
-    }
-  }
-}
+@import "../scss/component/_novedades.scss";
 </style>

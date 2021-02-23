@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-dark">
     <router-link to="/">
-    <img src="../assets/rafiki.png" />
+      <img src="../assets/rafiki.png" />
     </router-link>
     <button
       class="navbar-toggler navbar-dark"
@@ -15,27 +15,29 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <div v-if="user.loggedIn" class="mr-auto email">{{ user.data.email }}</div>
+      <div v-if="user.loggedIn" class="mr-auto email">
+        {{ user.data.email }}
+      </div>
       <div v-else class="mr-auto"></div>
       <i
         v-if="!admin"
         @click="cestita()"
         class="fa fa-shopping-cart"
         aria-hidden="true"
-        ><span>Carrito</span></i
+        ><span class="inside-i">Carrito</span></i
       >
       <i v-else @click="administrador()" class="fa fa-lock" aria-hidden="true"
-        ><span>Administrador</span></i
+        ><span class="inside-i">Administrador</span></i
       >
       <i
         @click="userProfile()"
         v-if="!user.loggedIn"
         class="fa fa-user-circle-o"
         aria-hidden="true"
-        ><span>Iniciar sesión</span></i
+        ><span class="inside-i">Iniciar sesión</span></i
       >
       <i v-else @click="logout()" class="fa fa-sign-out" aria-hidden="true"
-        ><span>Cerrar sesión</span>
+        ><span class="inside-i">Cerrar sesión</span>
       </i>
     </div>
   </nav>
@@ -68,10 +70,9 @@ export default {
             type: "error",
             text: "Se ha cerrado sesión. ",
           });
-          if(this.$route.name != "home"){
-            this.$router.push({name:'home'});
+          if (this.$route.name != "home") {
+            this.$router.push({ name: "home" });
           }
-          
         })
         .catch(function (error) {
           console.log(error);
@@ -117,34 +118,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-nav {
-  color: white;
-  .navbar-toggler-icon{
-    color: white;
-  }
-  img {
-    width: 64px;
-    height: 64px;
-    margin-right: 2rem;
-    &:hover{
-      transform: scale(1.05);
-    }
-  }
-  i {
-    font-size: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 1rem;
-    margin-left: 1rem;
-    &:hover {
-      transform: scale(1.1);
-      cursor: pointer;
-    }
-  }
-  span {
-    font-size: 1.5rem;
-    margin-left: 1rem;
-  }
-}
+  @import "../scss/component/_header.scss";
 </style>

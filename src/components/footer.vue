@@ -34,36 +34,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-footer {
-  background-color: #424242;
-  .topFooter {
-    padding: 1rem;
-    i {
-      font-size: 1.5rem;
-      color: white;
-      padding: 10px;
-      border: 2px solid white;
-      border-radius: 5px;
-      min-width: 3rem;
-      margin: 1rem;
-
-      &:hover {
-        -moz-transform: translate(-0px, -15px);
-        -ms-transform: translate(-0px, -15px);
-        -o-transform: translate(-0px, -15px);
-        -webkit-transform: translate(-0px, -15px);
-        transform: translate(-0px, -15px);
-      }
-    }
-  }
-
-  .botFooter {
-    padding: 1rem;
-    background-color: #262626;
-    p{
-      margin: 0;
-      color: white;
-    }
-  }
-}
+  @import "../scss/component/_footer.scss";
 </style>

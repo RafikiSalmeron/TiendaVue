@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="container-login">
     <nav class="navbar navbar-expand-lg navbar-light bg-dark">
       <router-link to="/">
-    <img src="../assets/rafiki.png" />
+        <img src="../assets/rafiki.png" />
       </router-link>
     </nav>
 
-    <h2> Iniciar sesión </h2>
+    <h2>Iniciar sesión</h2>
     <div class="field">
       <label class="label">E-mail</label>
       <div class="control">
@@ -28,7 +28,6 @@
           v-model="password"
         />
       </div>
-      
     </div>
     <div class="login">
       <button class="first" @click="loginEmail">Login</button>
@@ -38,14 +37,14 @@
       <button class="register" @click="registrar">Registrarse</button>
     </div>
 
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
 <script>
 import Firebase from "../db";
 import firebase from "firebase/app";
-import Footer from './footer.vue';
+import Footer from "./footer.vue";
 
 export default {
   name: "Login",
@@ -67,7 +66,7 @@ export default {
     },
   },
   methods: {
-    registrar(){
+    registrar() {
       this.$router.push({ name: "register" });
     },
     login(prov) {
@@ -94,6 +93,11 @@ export default {
           console.log(Firebase.auth.currentUser.email);
         })
         .catch(function (error) {
+          this.$notify({
+            title: "Inicio de Sesión",
+            type: "error",
+            text: "No se ha podido iniciar sesión.",
+          });
           console.log(error);
         });
     },
@@ -113,10 +117,18 @@ export default {
             this.$router.push({ name: "home" });
           })
           .catch((err) => {
-            console.log(err);
+            this.$notify({
+              title: "Inicio de Sesión",
+              type: "error",
+              text: err,
+            });
           });
       } else {
-        console.log("Todos los campos son requeridos");
+        this.$notify({
+          title: "Inicio de Sesión",
+          type: "error",
+          text: "Todos los campos deben estar rellenos.",
+        });
       }
     },
   },
@@ -135,58 +147,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  h2 {
-    margin: 2rem;
-  }
-  nav{
-    display: flex;
-    justify-content: center;
-  }
-  img {
-      width: 64px;
-      height: 64px;
-      &:hover{
-      transform: scale(1.05);
-    }
-    }
-  .register{
-      border-color: #292b2c;
-      &:hover{
-      background-color:#292b2c;
-    }
-  }
-
-  .first{
-      margin-bottom: 3rem;
-      border-color: #5cb85c;
-      &:hover{
-      background-color:#5cb85c;
-    }
-  }
-  .login{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-  }
-
-  input{
-    width: 40%;
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 1rem;
-  }
-  button {
-    width: 40%;
-    font-size: 1.5em;
-    border-style: solid;
-    margin: 1rem;
-    border-color: #0275d8;
-    border-radius: 7px;
-    &:hover{
-      color: white;
-      background-color:#0275d8;
-      transform: scale(1.05);
-    }
-  }
+@import "../scss/component/login.scss";
 </style>

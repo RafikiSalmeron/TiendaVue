@@ -6,7 +6,7 @@
       </router-link>
     </nav>
     <div class="container">
-      <div class="container2">
+      <div class="container-flex">
         <div class="field">
           <h2>Registrar</h2>
           <label class="label">Email</label>
@@ -67,10 +67,18 @@ export default {
             this.$router.push({ name: "login" });
           })
           .catch((err) => {
-            console.log(err);
+            this.$notify({
+              title: "Inicio de Sesión",
+              type: "error",
+              text: err,
+            });
           });
       } else {
-        console.log("Todos los campos son requeridos");
+        this.$notify({
+          title: "Inicio de Sesión",
+          type: "error",
+          text: "Todos los campos deben estar rellenos.",
+        });
       }
     },
   },
@@ -79,50 +87,5 @@ export default {
 
 
 <style scoped lang="scss">
-.container {
-  width: 100vw;
-  min-height: 70vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-h2 {
-  margin: 2rem;
-}
-nav {
-  display: flex;
-  justify-content: center;
-}
-img {
-  width: 64px;
-  height: 64px;
-  &:hover{
-      transform: scale(1.05);
-    }
-}
-
-input {
-  width: 40vw;
-  text-align: center;
-  font-size: 1.5em;
-  margin-bottom: 1rem;
-}
-
-label {
-  font-size: 1.5em;
-}
-
-button {
-  margin: 3rem;
-  border-color: #5cb85c;
-  border-radius: 7px;
-  border-style: solid;
-  font-size: 1.5em;
-  width: 40vw;
-  &:hover {
-    background-color: #5cb85c;
-    color: white;
-    transform: scale(1.05);
-  }
-}
+@import "../scss/component/_register.scss";
 </style>

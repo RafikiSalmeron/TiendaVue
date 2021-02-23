@@ -77,16 +77,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../scss/abstract/_mixins.scss";
-@import "../scss/abstract/_variables.scss";
-
-.jumbotron{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.272),rgba(0, 0, 0, 0.518)),url("../assets/fondo.jpg");
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center;
-    height: 93vh;
-    margin: 0;
-    border-radius: 0;
-  }
+ @import "../scss/component/_home.scss";
 </style>

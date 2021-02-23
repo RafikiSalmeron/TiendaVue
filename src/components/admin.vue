@@ -1,12 +1,60 @@
 <template>
   <div class="admin-container">
+    <Header/>
+    <h3>Añadir producto</h3>
+      <div id="divAñadir">
+           <table class="añadir">
+             <tr>
+                <td>ID: </td>
+                <td><input v-model="adminID" disabled /></td>
+              </tr>
+
+              <tr>
+                <td>Nombre: </td>
+                <td><input v-model="adminNombre" type="text"></td>
+              </tr>
+
+              <tr>
+                <td>Descripción: </td>
+                <td><input v-model="adminDescripcion" type="text"></td>
+              </tr>
+
+              <tr>
+                <td>Imagen src: </td>
+                <td><input v-model="adminImg" type="text"></td>
+              </tr>
+
+              <tr>
+                <td>Precio: </td>
+                <td><input v-model="adminPrecio" type="number" min="0"></td>
+              </tr>
+
+              <tr>
+                <td>Stock: </td>
+                <td><input v-model="adminStock" type="number" min="0"></td>
+              </tr>
+            </table>
+            <div class="boton">
+              <i v-if="edit" @click="editarProducto()" class="fa fa-plus-square fa-2x" style="color: #198754;" aria-hidden="true"> Editar</i>
+              <i v-else @click="addProduct" class="fa fa-plus-square fa-2x" style="color: #198754;" aria-hidden="true"> Añadir</i>      
+              <i v-if="edit" @click="cancelarEdit" class="fa fa-plus-square fa-2x" style="color: #198754;" aria-hidden="true"> Cancelar</i>
+            </div>
+
+        </div>
     <div class="div-container-produc">
       <div
         class="admin-product"
         v-for="producto in productos"
         v-bind:key="producto.id"
-      >
-        <img :src="producto.img" alt="Producto" />
+      > <div class="img-container">
+          <img :src="producto.img" alt="Producto" />
+      </div>
+        
+        <div class="desc-container">
+          <p>
+            <strong>Descripcion: {{ producto.descripcion }}</strong>
+          </p>
+        </div>
         <div class="text-container">
           <p>
             <strong>{{ producto.Nombre }}</strong>
@@ -18,29 +66,23 @@
             <strong>Precio: {{ producto.Precio }}</strong>
           </p>
           <button @click="editarCampos(producto)">Editar</button>
-        <button @click="borrarProducto(producto)">Eliminar</button>
+          <button @click="borrarProducto(producto)">Eliminar</button>
         </div>
-        
       </div>
     </div>
-    <div class="admin-inputs">
-      <label>ID: <input v-model="adminID" disabled /></label>
-      <label>Nombre: <input v-model="adminNombre" /></label>
-      <label>Descripcion: <textarea v-model="adminDescripcion" /></label>
-      <label>Precio: <input type="number" v-model="adminPrecio" /></label>
-      <label>URL imagen: <input v-model="adminImg" /></label>
-      <label>Stock: <input type="number" min="0" v-model="adminStock" /></label>
-      <button v-if="edit" @click="editarProducto()">Editar</button>
-      <button v-else @click="addProduct">Añadir</button>
-      <button v-if="edit" @click="cancelarEdit">Cancelar</button>
-    </div>
+
+    <Footer/>
   </div>
 </template>
 
 <script>
 import { db } from "../db";
+import Firebase from "../db";
+import Header from "./header.vue";
+import Footer from "./footer.vue";
 
 export default {
+  components: { Header, Footer },
   name: "Test",
   props: {},
   data() {
@@ -152,32 +194,28 @@ export default {
     productos: db.collection("Productos"),
     carrito: db.collection("Carrito"),
   },
+  mounted: function () {
+    if (Firebase.auth.currentUser) {
+      if (Firebase.auth.currentUser.email != "admin@admin.com") {
+        this.$notify({
+          title: "Inicio de Sesión",
+          type: "error",
+          text: "Tienes que ser administrador para acceder al administrador.",
+        });
+        this.$router.push({ name: "home" });
+      }
+    } else {
+      this.$notify({
+        title: "Inicio de Sesión",
+        type: "error",
+        text: "Tienes que iniciar sesión para acceder al administrador.",
+      });
+      this.$router.push({ name: "home" });
+    }
+  },
 };
 </script>
 
 <style scoped lang="scss">
-.div-container-produc {
-  width: 50%;
-}
-.text-container{
-  width: 70%;
-}
-.admin-inputs {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0;
-  right: 0;
-}
-.admin-container {
-  display: flex;
-}
-.admin-product {
-  display: flex;
-  flex-direction: row;
-}
-img {
-  width: 10rem;
-  height: 10rem;
-}
+@import "../scss/component/_admin.scss";
 </style>
