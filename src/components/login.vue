@@ -1,13 +1,45 @@
 <template>
-  <div id="login">
-    <button @click="login">Login</button>
-    <button @click="logout">Logout</button>
+  <div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+      <router-link to="/">
+    <img src="../assets/rafiki.png" />
+      </router-link>
+    </nav>
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control">
+        <input
+          class="input"
+          type="email"
+          placeholder="Email aqui.."
+          v-model="email"
+        />
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Contraseña</label>
+      <div class="control">
+        <input
+          class="input"
+          type="password"
+          placeholder="Contraseña aqui.."
+          v-model="password"
+        />
+      </div>
+    </div>
+    <div class="login">
+      <button @click="loginEmail">LoginEmail</button>
+      <button @click="login('Facebook')">LoginFacebook</button>
+      <button @click="login('Google')">LoginGoogle</button>
+      <button @click="login('Github')">LoginGithub</button>
+      <button @click="registrar">Register</button>
+    </div>
   </div>
 </template>
 
 <script>
 import Firebase from "../db";
-import firebase from 'firebase/app'
+import firebase from "firebase/app";
 
 export default {
   name: "Login",
@@ -18,6 +50,8 @@ export default {
         loggedIn: false,
         data: {},
       },
+      email: "",
+      password: "",
     };
   },
   computed: {
@@ -26,24 +60,57 @@ export default {
     },
   },
   methods: {
-    login() {
-      const provider = new firebase.auth.FacebookAuthProvider();
-      firebase.auth().signInWithPopup(provider)
-      .then(() =>{
-        this.$notify({title: 'Inicio de Sesión',type: 'success', text: 'Se ha iniciado sesión. '})
-        this.$router.push({name:'home'})
-      })
-      .catch(function(error){
-        console.log(error)
-        })
+    registrar(){
+      this.$router.push({ name: "register" });
     },
-    logout() {
-      firebase.auth().signOut()
-      .then(() =>{
-        this.$notify({title: 'Inicio de Sesión', type: 'error', text: 'Se ha cerrado sesión. '})
-      })
-      .catch(function(error) {
-        console.log(error)});
+    login(prov) {
+      var provider;
+      if (prov == "Facebook") {
+        provider = new firebase.auth.FacebookAuthProvider();
+      }
+      if (prov == "Google") {
+        provider = new firebase.auth.GoogleAuthProvider();
+      }
+      if (prov == "Github") {
+        provider = new firebase.auth.GithubAuthProvider();
+      }
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(() => {
+          this.$notify({
+            title: "Inicio de Sesión",
+            type: "success",
+            text: "Se ha iniciado sesión. ",
+          });
+          this.$router.push({ name: "home" });
+          console.log(Firebase.auth.currentUser.email);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    loginEmail: function () {
+      if (this.email && this.password) {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(this.email, this.password)
+          .then((user) => {
+            console.log(user.user.email);
+            console.log(Firebase.auth.currentUser.email);
+            this.$notify({
+              title: "Inicio de Sesión",
+              type: "success",
+              text: "Se ha iniciado sesión. ",
+            });
+            this.$router.push({ name: "home" });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        console.log("Todos los campos son requeridos");
+      }
     },
   },
   mounted: function () {
@@ -60,5 +127,26 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+  nav{
+    display: flex;
+    justify-content: center;
+  }
+  img {
+      width: 64px;
+      height: 64px;
+    }
+  .login{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  input{
+    width: 40%;
+  }
+  button {
+    width: 40%;
+  }
 </style>

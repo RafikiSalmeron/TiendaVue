@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <notifications position="top left"/>
+    <notifications position="bottom left"/>
     <router-view></router-view>
   </div>
 </template>
@@ -28,5 +28,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 0px;
+  background-color: white;
 }
 </style>

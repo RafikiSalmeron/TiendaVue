@@ -1,40 +1,38 @@
 <template>
   <section id="chart">
-			<nav aria-label="breadcrumb">
-				<ol class="breadcrumb">
-					<li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
-					<li class="breadcrumb-item active" aria-current="page">Nosotros</li>
-				</ol>
-			</nav>
+      <Header/>
 			<h3>Cesta</h3>
-			<h6>(1) Artículo en tu cesta </h6>
-			<hr id="tophr">
-			<div id="article">Artículo</diV>
-			<div id="precio">Precio</diV>
-			<div id="cantidad">Cantidad</div>
-      <div id="hola" v-for="chart in carrito" v-bind:key="chart.id">
-			<hr id="medhr">
-			<div class="articulo">
-				<div id="foto">
-           <img :src="chart.producto.img" class="img-article" alt="Producto" />
-				</div>
-				<div id="info">
-					<div id="producto"> {{chart.producto.Nombre}} </div>
-					<div id="infoProduc"> {{chart.producto.descripcion}}</div>
-					<div id="stock"> ¡Stock disponible! </div>
-				</div>
-			</div>
-			<div id="precioBot"> {{chart.producto.Precio}}</div>
-			<div id="step"> <input type="number" :id="chart.id" @change="cambiarUnidades" :value="chart.cantidad" min="1" :max="chart.producto.stock"> </div>
-      <button @click="removeProduct(chart.id)">Eliminar artículo</button>
-			<hr id="bothr">
-      </div>
+			<h6>({{cantidad}}) Artículo/s en tu cesta </h6>
+      <table>
+        <thead>
+            <th>Artículo</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+        </thead>
+        <tr v-for="chart in carrito" v-bind:key="chart.id">
+          <td class="exTD"> <img :src="chart.producto.img" class="img-article" alt="Producto" /> </td>
+          <td class="midTD">
+            <div id="info">
+              <div id="producto"> {{chart.producto.Nombre}} </div>
+              <div id="infoProduc"> {{chart.producto.descripcion}}</div>
+              <div id="stock"> ¡Stock disponible! </div>
+              <button @click="removeProduct(chart.id)">Eliminar artículo</button>
+            </div>
+          </td>
+          <td class="exTD"> 
+            <input type="number" :id="chart.id" @change="cambiarUnidades" :value="chart.cantidad" min="1" :max="chart.producto.stock"/>
+            {{chart.producto.Precio}} €
+          </td>
+        </tr>
+      </table>
+			<hr>
 
 			<div id="botonCesta">
 				<div id="subtotal">Subtotal({{cantidad}} producto/s): {{total}}</div>
 
 				<div id="realizar"><button @click="realizarPedido()">Realizar pedido</button></div>
 			</div>
+      <Footer/>
 		</section>
 </template>
 
@@ -42,8 +40,11 @@
 
 import Firebase from "../db";
 import { db } from "../db";
+import Header from './header.vue';
+import Footer from './footer.vue';
 
 export default {
+  components: { Header, Footer },
   name: "Chart",
   props: {},
   data() {
@@ -121,71 +122,31 @@ export default {
 
 </script>
 
-
-
-
-
-
-
-
 <style scoped>
     section {
-  
-  margin-left: 1rem;
-}
+    min-height: 100vh;
+  }
 
-h3 {
-  margin-left: 1rem;
-  grid-row: 2;
-}
+  table{
+    width: 100%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 
-h6 {
-  margin-left: 1rem;
-  grid-row: 3;
-}
+  tr{
+    border-top: 1px solid rgba(148, 148, 148, 0.76);
+  }
+  .exTD{
+   width: 25%;
+  }
 
-#tophr {
-  grid-row: 4;
-  grid-column: 1 / span 3;
-}
-
-#medhr {
-  grid-row: 6;
-  grid-column: 1 / span 3;
-}
-
-#article {
-  grid-row: 5;
-  grid-column: 1;
-  text-align: center;
-  align-self: center;
-}
-
-#precio {
-  grid-row: 5;
-  grid-column: 2;
-  text-align: center;
-  align-self: center;
-}
-
-#cantidad {
-  grid-row: 5;
-  grid-column: 3;
-  text-align: center;
-  align-self: center;
-}
-
-.articulo {
-  grid-row: 7;
-  grid-column: 1;
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  padding-left: 10%;
-}
+  .midTD{
+   width: 50%;
+  }
 
 .img-article {
-  width: 80%;
-  height: 80%;
+  max-width: 200px;
+  max-height:180px;
   align-self: center;
 }
 
@@ -212,35 +173,11 @@ h6 {
   color: green;
 }
 
-#precioBot {
-  grid-row: 7;
-  grid-column: 2;
-  text-align: center;
-  font-size: larger;
-  font-weight: bold;
-  align-self: center;
-}
-
 #step {
-  grid-row: 7;
-  grid-column: 3;
-  align-self: center;
   text-align: center;
-}
-
-#points {
-  width: 3em;
-  text-align: center;
-}
-
-#bothr {
-  grid-row: 8;
-  grid-column: 1 / span 3;
 }
 
 #botonCesta {
-  grid-row: 9;
-  grid-column: 1 / span 3;
   display: flex;
   flex-direction: column;
   align-items: center;
