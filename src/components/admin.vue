@@ -52,13 +52,13 @@
         
         <div class="desc-container">
           <p>
-            <strong>Descripcion: {{ producto.descripcion }}</strong>
+            <strong>{{ producto.Nombre }}</strong>
+          </p>
+          <p>
+            {{ producto.descripcion }}
           </p>
         </div>
         <div class="text-container">
-          <p>
-            <strong>{{ producto.Nombre }}</strong>
-          </p>
           <p>
             <strong>Stock: {{ producto.stock }}</strong>
           </p>
