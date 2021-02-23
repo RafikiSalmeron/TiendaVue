@@ -12,7 +12,7 @@
 			<div id="article">Artículo</diV>
 			<div id="precio">Precio</diV>
 			<div id="cantidad">Cantidad</div>
-      <div id="hola" v-for="chart in carrito" v-bind:key="chart.id">
+      <div id="articulo-container" v-for="chart in carrito" v-bind:key="chart.id">
 			<hr id="medhr">
 			<div class="articulo">
 				<div id="foto">
@@ -25,15 +25,15 @@
 				</div>
 			</div>
 			<div id="precioBot"> {{chart.producto.Precio}}</div>
-			<div id="step"> <input type="number" id="points" :value="chart.cantidad" min="1" :max="chart.producto.stock"> </div>
+			<div id="step"> <input type="number" :id="chart.id" @change="cambiarUnidades" :value="chart.cantidad" min="1" :max="chart.producto.stock"> </div>
       <button @click="removeProduct(chart.id)">Eliminar artículo</button>
 			<hr id="bothr">
       </div>
 
 			<div id="botonCesta">
-				<div id="subtotal">Subtotal(1 producto): 50 €</div>
+				<div id="subtotal">Subtotal({{cantidad}} producto/s): {{total}}</div>
 
-				<div id="realizar"><a href="index.html">Realizar pedido</a></div>
+				<div id="realizar"><button @click="realizarPedido()">Realizar pedido</button></div>
 			</div>
 		</section>
 </template>
@@ -55,27 +55,65 @@ export default {
       carrito: []
     };
   },
+   computed: {
+     total : function () {
+       let pTotal = 0;
+       for ( var item of this.carrito){
+         pTotal += item.precioTotal;    
+       }
+       return pTotal.toFixed(2) + " €";
+     },
+     cantidad : function () {
+       let cTotal = 0;
+       for ( var item of this.carrito){
+         cTotal += parseFloat(item.cantidad);    
+       }
+       return cTotal;
+     }
+   },
    methods: {
+    realizarPedido(){
+      for ( var item of this.carrito){
+          db.collection("Carrito").doc(item.id).delete();
+       }
+       this.$notify({title: 'Pedido realizado', type: 'success', text: 'El pedido se ha realizado correctamente.'})
+       this.$router.push({name:'home'});
+    },
     removeProduct(id){
       db.collection("Carrito").doc(id).delete();
     },
+    cambiarUnidades: function (e) {
+         let articulo;
+         db.collection('Carrito').doc(e.target.id).get().then(snapshot => {
+            articulo = snapshot.data()
+            console.log(articulo.producto.Precio);
+            // do something with document
+            db.collection('Carrito').doc(e.target.id).
+            update({
+              cantidad: e.target.value,
+              precioTotal: articulo.producto.Precio.toFixed(2) * e.target.value
+            })
+        })
+          
+        },
    },
+  
+   firestore: {
+      carrito: db.collection("Carrito").where("email", "==", Firebase.auth.currentUser ? Firebase.auth.currentUser.email:""),
+  },
   mounted: function () {
-    Firebase.auth.onAuthStateChanged((user) => {
-      if (user) {
+    if(Firebase.auth.currentUser){
         this.user.loggedIn = true;
-        this.user.data = user;
-      } else {
-        /*
+        this.user.data = Firebase.auth.currentUser;
+        this.$bind('carrito', db.collection("Carrito").where("email", "==", Firebase.auth.currentUser.email));
+        console.log(true);
+      }else{
+        this.user.loggedIn = false;
         this.$notify({title: 'Inicio de Sesión', type: 'error', text: 'Tienes que iniciar sesión para acceder al carrito.'})
         this.$router.push({name:'home'});
-        */
+        this.$bind('carrito', db.collection("Carrito").where("email", "==", ""));
+        console.log(false);
       }
-    });
-    console.log(this.carrito);
-  },
-    firestore: {
-      carrito: db.collection("Carrito").where("email", "==", "rafikisalmeronmartos@gmail.com"),
   },
 };
 

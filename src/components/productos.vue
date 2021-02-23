@@ -1,19 +1,24 @@
 <template>
   <div id="productos-main-container">
     <h2>Productos</h2>
-    <div id="productos-container">
+    <div class="productos-container">
       <div
-        id="produc-card"
+        class="produc-card"
         v-for="producto in productos"
         v-bind:key="producto.id"
         v-cloak
       >
-        <p>Nombre : {{ producto.Nombre }}</p>
-        <p>Descripcion : {{ producto.descripcion }}</p>
-        <p>Precio : {{ producto.Precio }}</p>
-        <img :src="producto.img" alt="Producto" />
+        <img :src="producto.img" alt="Producto Novedad" />
+        <p class="bold">{{ producto.Nombre }}</p>
+        <p>{{ producto.descripcion }}</p>
+        <p class="bold">{{ producto.Precio }} €</p>
         <p>Stock : {{ producto.stock }}</p>
-        <button :disabled="stock(producto)" @click="addProduct(producto)">
+        <button
+          class="btnAddChart"
+          v-if="!admin"
+          :disabled="stock(producto)"
+          @click="addProduct(producto)"
+        >
           Añadir al carrito
         </button>
       </div>
@@ -47,7 +52,6 @@ export default {
       console.log(this.carrito);
       console.log(producto);
       for (var chart of this.carrito) {
-              console.log(chart.email);
         if (
           chart.email == this.user.data.email &&
           chart.idProduct == producto.id
@@ -62,7 +66,8 @@ export default {
             this.$notify({title: 'Añadir al carrito',type: 'error', text: 'No hay más stock disponible. Ya tienes el máximo número de artículos posible en el carrito.'})
         }else{
           db.collection("Carrito").doc(this.cesta.id).update({
-            cantidad: this.cesta.cantidad + 1,
+            cantidad: parseFloat(this.cesta.cantidad) + 1,
+            precioTotal: (parseFloat(this.cesta.cantidad) + 1) * parseFloat(producto.Precio),
             producto
           });
           this.$notify({title: 'Añadir al carrito',type: 'success', text: 'Has añadido un producto al carrito.'})
@@ -72,6 +77,7 @@ export default {
           email: this.user.data.email,
           idProduct: producto.id,
           cantidad: 1,
+          precioTotal: parseFloat(producto.Precio),
           producto
           });
           this.$notify({title: 'Añadir al carrito',type: 'success', text: 'Has añadido un producto al carrito.'})
@@ -88,6 +94,7 @@ export default {
         loggedIn: false,
         data: {},
       },
+      admin: false,
       carrito: [],
       cesta: null,
       hay: false
@@ -101,6 +108,9 @@ export default {
       if (user) {
         this.user.loggedIn = true;
         this.user.data = user;
+        if(this.user.data.email == "admin@admin.com"){
+          this.admin = true;
+        }
       } else {
         this.user.loggedIn = false;
         this.user.data = {};
@@ -110,5 +120,33 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+.bold {
+  font-weight: bold;
+}
+.btnAddChart{
+  font-size: 2rem;
+  background-color: rgb(60, 179, 113);
+  border-color: white;
+  &:hover {
+      transform: scale(1.1);
+    }
+}
+.productos-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  
+}
+.produc-card {
+  border: 1px solid black;
+  width: 300px;
+  margin: 0;
+  padding: 1rem;
+  img {
+    width: 200px;
+    height: 180px;
+  }
+}
 </style>

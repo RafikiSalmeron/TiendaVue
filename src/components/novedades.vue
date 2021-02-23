@@ -1,91 +1,125 @@
 <template>
   <div id="noved-main-container">
-      <h2> Novedades </h2>
-      <div id="noved-container">
-          <div id="noved-card" v-for="producto in novedades" v-bind:key="producto.id" v-cloak>
-              <p> Nombre : {{producto.Nombre}} </p>
-              <p> Descripcion : {{producto.descripcion}} </p>
-              <p> Precio  : {{producto.Precio}} </p>
-              <img :src="producto.img" alt="Producto Novedad" />
-              <p> Stock : {{producto.stock}} </p>
-              <button :disabled="stock(producto)" @click="addProduct(producto)"> Añadir al carrito </button>
-          </div>
+    <h2>Novedades</h2>
+    <div class="noved-container">
+      <div
+        class="noved-card"
+        v-for="producto in novedades"
+        v-bind:key="producto.id"
+        v-cloak
+      >
+        <img :src="producto.img" alt="Producto Novedad" />
+        <p class="bold">{{ producto.Nombre }}</p>
+        <p>{{ producto.descripcion }}</p>
+        <p class="bold">{{ producto.Precio }} €</p>
+        <p>Stock : {{ producto.stock }}</p>
+        <button
+          class="btnAddChart"
+          v-if="!admin"
+          :disabled="stock(producto)"
+          @click="addProduct(producto)"
+        >
+          Añadir al carrito
+        </button>
       </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Firebase from "../db";
-import {db} from '../db';
-
+import { db } from "../db";
 
 export default {
   name: "Novedades",
   props: {
-      novedades: {
-          type: Array,
-          default: function () {
-              return [];
-          }
-      }
+    novedades: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
   },
-    methods: {
-      stock(producto) {
+  methods: {
+    stock(producto) {
       if (producto.stock > 0) {
         return false;
       }
       return true;
     },
     addProduct(producto) {
-      if(this.user.loggedIn){
-      console.log(this.carrito);
-      console.log(producto);
-      for (var chart of this.carrito) {
-              console.log(chart.email);
-        if (
-          chart.email == this.user.data.email &&
-          chart.idProduct == producto.id
-        ){
-          console.log("HAY");
-          this.cesta = chart;
-          this.hay = true;
+      if (this.user.loggedIn) {
+        console.log(this.carrito);
+        console.log(producto);
+        for (var chart of this.carrito) {
+          if (
+            chart.email == this.user.data.email &&
+            chart.idProduct == producto.id
+          ) {
+            console.log("HAY");
+            this.cesta = chart;
+            this.hay = true;
+          }
         }
-      }
-      if(this.hay){
-        if(this.cesta.cantidad == producto.stock){
-            this.$notify({title: 'Añadir al carrito',type: 'error', text: 'No hay más stock disponible. Ya tienes el máximo número de artículos posible en el carrito.'})
-        }else{
-          db.collection("Carrito").doc(this.cesta.id).update({
-            cantidad: this.cesta.cantidad + 1,
-            producto
+        if (this.hay) {
+          if (this.cesta.cantidad == producto.stock) {
+            this.$notify({
+              title: "Añadir al carrito",
+              type: "error",
+              text:
+                "No hay más stock disponible. Ya tienes el máximo número de artículos posible en el carrito.",
+            });
+          } else {
+            db.collection("Carrito")
+              .doc(this.cesta.id)
+              .update({
+                cantidad: parseFloat(this.cesta.cantidad) + 1,
+                precioTotal:
+                  (parseFloat(this.cesta.cantidad) + 1) *
+                  parseFloat(producto.Precio),
+                producto,
+              });
+            this.$notify({
+              title: "Añadir al carrito",
+              type: "success",
+              text: "Has añadido un producto al carrito.",
+            });
+          }
+        } else {
+          db.collection("Carrito").add({
+            email: this.user.data.email,
+            idProduct: producto.id,
+            cantidad: 1,
+            precioTotal: parseFloat(producto.Precio),
+            producto,
           });
-          this.$notify({title: 'Añadir al carrito',type: 'success', text: 'Has añadido un producto al carrito.'})
-        }  
-      }else{
-        db.collection("Carrito").add({
-          email: this.user.data.email,
-          idProduct: producto.id,
-          cantidad: 1,
-          producto
+          this.$notify({
+            title: "Añadir al carrito",
+            type: "success",
+            text: "Has añadido un producto al carrito.",
           });
-          this.$notify({title: 'Añadir al carrito',type: 'success', text: 'Has añadido un producto al carrito.'})
-      }
-      this.hay = false;
-      }else{
-        this.$notify({title: 'Añadir al carrito',type: 'error', text: 'Tienes que iniciar sesión para añadir productos al carrito.'})
+        }
+        this.hay = false;
+      } else {
+        this.$notify({
+          title: "Añadir al carrito",
+          type: "error",
+          text: "Tienes que iniciar sesión para añadir productos al carrito.",
+        });
       }
     },
   },
-  data(){
+  data() {
     return {
       user: {
         loggedIn: false,
         data: {},
       },
+      admin: false,
       carrito: [],
       cesta: null,
-      hay: false
-    }
+      hay: false,
+    };
   },
   firestore: {
     carrito: db.collection("Carrito"),
@@ -95,6 +129,9 @@ export default {
       if (user) {
         this.user.loggedIn = true;
         this.user.data = user;
+        if (this.user.data.email == "admin@admin.com") {
+          this.admin = true;
+        }
       } else {
         this.user.loggedIn = false;
         this.user.data = {};
@@ -104,6 +141,32 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped lang="scss">
+.bold {
+  font-weight: bold;
+}
+.btnAddChart {
+  font-size: 2rem;
+  background-color: rgb(60, 179, 113);
+  border-color: white;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+.noved-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.noved-card {
+  border: 1px solid black;
+  width: 300px;
+  margin: 0;
+  padding: 1rem;
+  img {
+    width: 200px;
+    height: 180px;
+  }
+}
 </style>

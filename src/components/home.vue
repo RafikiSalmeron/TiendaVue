@@ -57,7 +57,7 @@ export default {
         this.user.loggedIn = true;
         this.user.data = user;
         console.log(this.user.loggedIn);
-        console.log(this.user.data.displayName);
+        //console.log(Firebase.auth.currentUser);
       } else {
         this.user.loggedIn = false;
         this.user.data = {};
