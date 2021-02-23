@@ -35,9 +35,9 @@
               </tr>
             </table>
             <div class="boton">
-              <i v-if="edit" @click="editarProducto()" class="fa fa-plus-square fa-2x" style="color: #198754;" aria-hidden="true"> Editar</i>
+              <i v-if="edit" @click="editarProducto()" class="fa fa-check fa-2x" style="color: #198754;" aria-hidden="true"> Editar</i>
               <i v-else @click="addProduct" class="fa fa-plus-square fa-2x" style="color: #198754;" aria-hidden="true"> Añadir</i>      
-              <i v-if="edit" @click="cancelarEdit" class="fa fa-plus-square fa-2x" style="color: #198754;" aria-hidden="true"> Cancelar</i>
+              <i v-if="edit" @click="cancelarEdit" class="fa fa-times fa-2x" style="color: #198754;" aria-hidden="true"> Cancelar</i>
             </div>
 
         </div>
