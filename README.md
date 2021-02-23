@@ -1,24 +1,24 @@
-# tienda-proyecto
+# TiendaVue
+Página web estructurada en Vue y diseñada con Sass.
+La página contiene tecnologías avanzadas de firebase, para todo el control de productos y usuarios.
 
-## Project setup
-```
-npm install
-```
+<h3>Conociemientos Empleados: </h3>
+<ul>
+  <li>JavaScript</li>
+  <li>Vue</li>
+  <li>HTML5</li>
+  <li>JSON</li>
+  <li>CSS</li>
+  <li>Bootstrap</li>
+  <li>Sass</li>
+</ul>
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+<h3> Tienda Vue </h3>
+(https://tienda-proyecto-cb7c6.firebaseapp.com/#/)
 
-### Lints and fixes files
-```
-npm run lint
-```
+<h3> Proyecto GitHub </h3>
+(https://github.com/RafikiSalmeron/TiendaVue)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+<h2> RAFAEL SALMERÓN MARTOS </h2>
