@@ -126,6 +126,9 @@ nav {
     width: 64px;
     height: 64px;
     margin-right: 2rem;
+    &:hover{
+      transform: scale(1.05);
+    }
   }
   i {
     font-size: 3rem;

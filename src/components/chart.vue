@@ -15,13 +15,14 @@
             <div id="info">
               <div id="producto"> {{chart.producto.Nombre}} </div>
               <div id="infoProduc"> {{chart.producto.descripcion}}</div>
-              <div id="stock"> ¡Stock disponible! </div>
-              <button @click="removeProduct(chart.id)">Eliminar artículo</button>
+              <div class="stock"> ¡Stock disponible! </div>
+              <button class="eliminar" @click="removeProduct(chart.id)">Eliminar artículo</button>
             </div>
           </td>
           <td class="exTD"> 
             <input type="number" :id="chart.id" @change="cambiarUnidades" :value="chart.cantidad" min="1" :max="chart.producto.stock"/>
-            {{chart.producto.Precio}} €
+            <p class="precio">{{chart.producto.Precio}} €</p>
+            
           </td>
         </tr>
       </table>
@@ -30,7 +31,7 @@
 			<div id="botonCesta">
 				<div id="subtotal">Subtotal({{cantidad}} producto/s): {{total}}</div>
 
-				<div id="realizar"><button @click="realizarPedido()">Realizar pedido</button></div>
+				<div id="realizar"><button class="btnRealizar" @click="realizarPedido()">Realizar pedido</button></div>
 			</div>
       <Footer/>
 		</section>
@@ -122,13 +123,36 @@ export default {
 
 </script>
 
-<style scoped>
-    section {
+<style scoped lang="scss">
+  section {
     min-height: 100vh;
   }
 
+  .btnRealizar {
+    border-color: green;
+    border-radius: 9px;
+    border-style: solid;
+    &:hover{
+      background-color: #5cb85c;
+      color: white;
+    }
+  }
+
+  .eliminar{
+    border-color: red;
+    border-radius: 9px;
+    &:hover{
+      background-color: #d9534f;
+      color: white;
+    }
+  }
+
+  .precio{
+    margin-top: 1rem;
+    font-size: 2rem;
+  }
   table{
-    width: 100%;
+    width: 99%;
     margin-left: 1rem;
     margin-right: 1rem;
   }
@@ -142,6 +166,7 @@ export default {
 
   .midTD{
    width: 50%;
+   padding: 1rem;
   }
 
 .img-article {
@@ -168,9 +193,10 @@ export default {
   margin-bottom: 3vh;
 }
 
-#stock {
+.stock {
   font-weight: bold;
   color: green;
+  margin-bottom: 1rem;
 }
 
 #step {
@@ -198,10 +224,9 @@ export default {
   text-align: center;
   height: 40%;
   margin-top: 4vh;
-  background-color: #B6D7A8;
-  box-shadow: 2px 3px;
-  border-radius: 8px;
+  margin-bottom: 2rem;
 }
+
 
 #realizar a{
   color:black;

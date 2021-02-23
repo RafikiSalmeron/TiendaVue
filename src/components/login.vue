@@ -5,13 +5,15 @@
     <img src="../assets/rafiki.png" />
       </router-link>
     </nav>
+
+    <h2> Iniciar sesión </h2>
     <div class="field">
-      <label class="label">Email</label>
+      <label class="label">E-mail</label>
       <div class="control">
         <input
           class="input"
           type="email"
-          placeholder="Email aqui.."
+          placeholder="E-mail aqui.."
           v-model="email"
         />
       </div>
@@ -26,23 +28,28 @@
           v-model="password"
         />
       </div>
+      
     </div>
     <div class="login">
-      <button @click="loginEmail">LoginEmail</button>
-      <button @click="login('Facebook')">LoginFacebook</button>
-      <button @click="login('Google')">LoginGoogle</button>
-      <button @click="login('Github')">LoginGithub</button>
-      <button @click="registrar">Register</button>
+      <button class="first" @click="loginEmail">Login</button>
+      <button @click="login('Facebook')">Login con Facebook</button>
+      <button @click="login('Google')">Login con Google</button>
+      <button @click="login('Github')">Login con Github</button>
+      <button class="register" @click="registrar">Registrarse</button>
     </div>
+
+    <Footer/>
   </div>
 </template>
 
 <script>
 import Firebase from "../db";
 import firebase from "firebase/app";
+import Footer from './footer.vue';
 
 export default {
   name: "Login",
+  components: { Footer },
   props: {},
   data() {
     return {
@@ -128,6 +135,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  h2 {
+    margin: 2rem;
+  }
   nav{
     display: flex;
     justify-content: center;
@@ -135,7 +145,24 @@ export default {
   img {
       width: 64px;
       height: 64px;
+      &:hover{
+      transform: scale(1.05);
     }
+    }
+  .register{
+      border-color: #292b2c;
+      &:hover{
+      background-color:#292b2c;
+    }
+  }
+
+  .first{
+      margin-bottom: 3rem;
+      border-color: #5cb85c;
+      &:hover{
+      background-color:#5cb85c;
+    }
+  }
   .login{
     display: flex;
     flex-direction: column;
@@ -145,8 +172,21 @@ export default {
 
   input{
     width: 40%;
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 1rem;
   }
   button {
     width: 40%;
+    font-size: 1.5em;
+    border-style: solid;
+    margin: 1rem;
+    border-color: #0275d8;
+    border-radius: 7px;
+    &:hover{
+      color: white;
+      background-color:#0275d8;
+      transform: scale(1.05);
+    }
   }
 </style>

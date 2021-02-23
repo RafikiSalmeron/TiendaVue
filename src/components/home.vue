@@ -1,6 +1,10 @@
 <template>
   <div id="home">
     <Header/>
+    <div class="jumbotron jumbotron-fluid" style="background-repeat:no-repeat">
+
+        <img src="../assets/rafiki.png" width="250px" height="250px" alt="">
+     </div>
     <Novedades :novedades = "novedad"/>
     <Productos :productos = "productos"/> 
     <Footer/>
@@ -72,13 +76,17 @@ export default {
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 0px;
-}
+<style scoped lang="scss">
+@import "../scss/abstract/_mixins.scss";
+@import "../scss/abstract/_variables.scss";
+
+.jumbotron{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.272),rgba(0, 0, 0, 0.518)),url("../assets/fondo.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    height: 93vh;
+    margin: 0;
+    border-radius: 0;
+  }
 </style>
