@@ -11,6 +11,7 @@ La página contiene tecnologías avanzadas de firebase, para todo el control de 
   <li>CSS</li>
   <li>Bootstrap</li>
   <li>Sass</li>
+  
 </ul>
 
 
