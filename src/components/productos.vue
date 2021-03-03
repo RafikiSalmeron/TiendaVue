@@ -14,6 +14,7 @@
         <p class="bold precio">{{ producto.Precio }} €</p>
         <p class="stock">Stock : {{ producto.stock }}</p>
         <div class="btnContainer">
+          
           <button
             class="btnAddChart"
             v-if="!admin"
