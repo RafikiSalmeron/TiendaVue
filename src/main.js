@@ -16,9 +16,6 @@ Vue.use(Notifications)
 import Login from './components/login.vue'
 Vue.component(Login)
 
-import Register from './components/register.vue'
-Vue.component(Register)
-
 import Home from './components/home.vue'
 Vue.component(Home)
 
@@ -28,6 +25,21 @@ Vue.component(Chart)
 import Admin from './components/admin.vue'
 Vue.component(Admin)
 
+import AboutUs from './components/aboutUs.vue'
+Vue.component(AboutUs)
+
+import Contact from './components/contact.vue'
+Vue.component(Contact)
+
+import Profile from './components/profile.vue'
+Vue.component(Profile)
+
+import Register from './components/register.vue'
+Vue.component(Register)
+
+import ProductsList from './components/productsList.vue'
+Vue.component(ProductsList)
+
 
 
 const routes = [
@@ -35,7 +47,11 @@ const routes = [
   { path: '/login', name: 'login', component: Login },
   { path: '/chart', name: 'chart', component: Chart },
   { path: '/admin', name: 'admin', component: Admin },
+  { path: '/aboutUs', name: 'aboutUs', component: AboutUs },
+  { path: '/contact', name: 'contact', component: Contact },
+  { path: '/profile', name: 'profile', component: Profile },
   { path: '/register', name: 'register', component: Register },
+  { path: '/productsList', name: 'productList', component: ProductsList },
 ]
 
 const router = new VueRouter({
