@@ -48,14 +48,8 @@ export default {
     },
     addProduct(producto) {
       if (this.user.loggedIn) {
-        console.log(this.carrito);
-        console.log(producto);
         for (var chart of this.carrito) {
-          if (
-            chart.email == this.user.data.email &&
-            chart.idProduct == producto.id
-          ) {
-            console.log("HAY");
+          if (chart.email == this.email && chart.idProduct == producto.id) {
             this.cesta = chart;
             this.hay = true;
           }
@@ -86,7 +80,7 @@ export default {
           }
         } else {
           db.collection("Carrito").add({
-            email: this.user.data.email,
+            email: this.email,
             idProduct: producto.id,
             cantidad: 1,
             precioTotal: parseFloat(producto.Precio),
@@ -114,6 +108,7 @@ export default {
         loggedIn: false,
         data: {},
       },
+      email: "",
       admin: false,
       carrito: [],
       cesta: null,
@@ -124,11 +119,11 @@ export default {
     carrito: db.collection("Carrito"),
   },
   mounted: function () {
+    this.email = localStorage.getItem("userEmail");
     Firebase.auth.onAuthStateChanged((user) => {
       if (user) {
         this.user.loggedIn = true;
-        this.user.data = user;
-        if (this.user.data.email == "admin@admin.com") {
+        if (this.email == "admin@admin.com") {
           this.admin = true;
         }
       } else {

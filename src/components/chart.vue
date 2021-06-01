@@ -72,6 +72,7 @@ export default {
         loggedIn: true,
         data: {},
       },
+      email: null,
       carrito: [],
     };
   },
@@ -94,6 +95,12 @@ export default {
   methods: {
     realizarPedido() {
       for (var item of this.carrito) {
+        console.log(item);
+        db.collection("Productos")
+          .doc(item.idProduct)
+          .update({
+            stock: item.producto.stock - item.cantidad,
+          });
         db.collection("Carrito").doc(item.id).delete();
       }
       this.$notify({
@@ -128,21 +135,15 @@ export default {
   firestore: {
     carrito: db
       .collection("Carrito")
-      .where(
-        "email",
-        "==",
-        Firebase.auth.currentUser ? Firebase.auth.currentUser.email : ""
-      ),
+      .where("email", "==", Firebase.auth.currentUser ? this.email : ""),
   },
   mounted: function () {
-    if (Firebase.auth.currentUser) {
+    this.email = localStorage.getItem("userEmail");
+    if (this.email) {
       this.user.loggedIn = true;
-      this.user.data = Firebase.auth.currentUser;
       this.$bind(
         "carrito",
-        db
-          .collection("Carrito")
-          .where("email", "==", Firebase.auth.currentUser.email)
+        db.collection("Carrito").where("email", "==", this.email)
       );
       console.log(true);
     } else {
@@ -161,5 +162,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "../scss/component/_chart.scss";
+@import "../scss/component/_chart.scss";
 </style>

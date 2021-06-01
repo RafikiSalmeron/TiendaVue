@@ -1,55 +1,79 @@
 <template>
   <div class="admin-container">
-    <Header/>
+    <Header />
     <h3>Añadir producto</h3>
-      <div id="divAñadir">
-           <table class="añadir">
-             <tr>
-                <td>ID: </td>
-                <td><input v-model="adminID" disabled /></td>
-              </tr>
+    <div id="divAñadir">
+      <table class="añadir">
+        <tr>
+          <td>ID:</td>
+          <td><input v-model="adminID" disabled /></td>
+        </tr>
 
-              <tr>
-                <td>Nombre: </td>
-                <td><input v-model="adminNombre" type="text"></td>
-              </tr>
+        <tr>
+          <td>Nombre:</td>
+          <td><input v-model="adminNombre" type="text" /></td>
+        </tr>
 
-              <tr>
-                <td>Descripción: </td>
-                <td><input v-model="adminDescripcion" type="text"></td>
-              </tr>
+        <tr>
+          <td>Descripción:</td>
+          <td><input v-model="adminDescripcion" type="text" /></td>
+        </tr>
 
-              <tr>
-                <td>Imagen src: </td>
-                <td><input v-model="adminImg" type="text"></td>
-              </tr>
+        <tr>
+          <td>Imagen src:</td>
+          <td><input v-model="adminImg" type="text" /></td>
+        </tr>
 
-              <tr>
-                <td>Precio: </td>
-                <td><input v-model="adminPrecio" type="number" min="0"></td>
-              </tr>
+        <tr>
+          <td>Precio:</td>
+          <td><input v-model="adminPrecio" type="number" min="0" /></td>
+        </tr>
 
-              <tr>
-                <td>Stock: </td>
-                <td><input v-model="adminStock" type="number" min="0"></td>
-              </tr>
-            </table>
-            <div class="boton">
-              <i v-if="edit" @click="editarProducto()" class="fa fa-check fa-2x" style="color: #198754;" aria-hidden="true"> Editar</i>
-              <i v-else @click="addProduct" class="fa fa-plus-square fa-2x" style="color: #198754;" aria-hidden="true"> Añadir</i>      
-              <i v-if="edit" @click="cancelarEdit" class="fa fa-times fa-2x" style="color: #198754;" aria-hidden="true"> Cancelar</i>
-            </div>
-
-        </div>
+        <tr>
+          <td>Stock:</td>
+          <td><input v-model="adminStock" type="number" min="0" /></td>
+        </tr>
+      </table>
+      <div class="boton">
+        <i
+          v-if="edit"
+          @click="editarProducto()"
+          class="fa fa-check fa-2x"
+          style="color: #198754"
+          aria-hidden="true"
+        >
+          Editar</i
+        >
+        <i
+          v-else
+          @click="addProduct"
+          class="fa fa-plus-square fa-2x"
+          style="color: #198754"
+          aria-hidden="true"
+        >
+          Añadir</i
+        >
+        <i
+          v-if="edit"
+          @click="cancelarEdit"
+          class="fa fa-times fa-2x"
+          style="color: #198754"
+          aria-hidden="true"
+        >
+          Cancelar</i
+        >
+      </div>
+    </div>
     <div class="div-container-produc">
       <div
         class="admin-product"
         v-for="producto in productos"
         v-bind:key="producto.id"
-      > <div class="img-container">
+      >
+        <div class="img-container">
           <img :src="producto.img" alt="Producto" />
-      </div>
-        
+        </div>
+
         <div class="desc-container">
           <p>
             <strong>{{ producto.Nombre }}</strong>
@@ -71,13 +95,12 @@
       </div>
     </div>
 
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
 <script>
 import { db } from "../db";
-import Firebase from "../db";
 import Header from "./header.vue";
 import Footer from "./footer.vue";
 
@@ -91,6 +114,7 @@ export default {
         loggedIn: true,
         data: {},
       },
+      email: "",
       productos: [],
       carrito: [],
       adminID: "ID Automático",
@@ -195,8 +219,10 @@ export default {
     carrito: db.collection("Carrito"),
   },
   mounted: function () {
-    if (Firebase.auth.currentUser) {
-      if (Firebase.auth.currentUser.email != "admin@admin.com") {
+    this.email = localStorage.getItem("userEmail");
+    if (this.email) {
+      console.log("ENTRA");
+      if (this.email != "admin@admin.com") {
         this.$notify({
           title: "Inicio de Sesión",
           type: "error",

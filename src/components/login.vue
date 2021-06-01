@@ -89,8 +89,8 @@ export default {
             type: "success",
             text: "Se ha iniciado sesión. ",
           });
+          localStorage.setItem("userEmail", Firebase.auth.currentUser.email);
           this.$router.push({ name: "home" });
-          console.log(Firebase.auth.currentUser.email);
         })
         .catch(function (error) {
           this.$notify({
@@ -114,6 +114,7 @@ export default {
               type: "success",
               text: "Se ha iniciado sesión. ",
             });
+            localStorage.setItem("userEmail", Firebase.auth.currentUser.email);
             this.$router.push({ name: "home" });
           })
           .catch((err) => {
@@ -131,17 +132,6 @@ export default {
         });
       }
     },
-  },
-  mounted: function () {
-    Firebase.auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.user.loggedIn = true;
-        this.user.data = user;
-      } else {
-        this.user.loggedIn = false;
-        this.user.data = {};
-      }
-    });
   },
 };
 </script>

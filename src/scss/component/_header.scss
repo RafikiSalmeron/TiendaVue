@@ -3,6 +3,7 @@
 // Aplico color de letra en blanco 
 nav {
   color: color(secondary);
+  background-color: color(fondoSecon);
   // Aplico tamaño para el logo
   img {
     width: 64px;
@@ -31,4 +32,12 @@ nav {
       margin-left: 1rem;
     }
   }
+}
+.botHeader {
+  padding: 1rem;
+  background-color: color(fondo); 
+  .nav-link:not(.active) {
+    cursor: pointer;
+    color:white;
+  } 
 }

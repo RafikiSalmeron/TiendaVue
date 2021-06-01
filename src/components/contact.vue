@@ -1,62 +1,55 @@
 <template>
   <div id="contact">
-    <Header/>
-    <h2> CONTACTO </h2>
-    <Footer/>
+    <Header />
+    <h2>CONTACTO</h2>
+    <Footer />
   </div>
 </template>
 
 <script>
+import Header from "./header.vue";
+import Footer from "./footer.vue";
 
-
-import Header from './header.vue';
-import Footer from './footer.vue';
-import Firebase from "../db";
-
-import {db} from '../db';
-
-
+import { db } from "../db";
 
 export default {
-  name: 'Contact',
+  name: "Contact",
 
   components: {
-      Header,
-      Footer
+    Header,
+    Footer,
   },
-  data(){
+  data() {
     return {
-      productos : [],
+      productos: [],
       user: {
         loggedIn: false,
         data: {},
       },
-    }
+      email: null,
+    };
   },
   computed: {
     authenticated() {
       return this.user.loggedIn;
-    }
+    },
   },
   mounted: function () {
-    Firebase.auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.user.loggedIn = true;
-        this.user.data = user;
-        console.log(this.user.loggedIn);
-        //console.log(Firebase.auth.currentUser);
-      } else {
-        this.user.loggedIn = false;
-        this.user.data = {};
-        console.log(this.user.loggedIn);
-      }
-    });
+    this.email = localStorage.getItem("userEmail");
+    if (this.email) {
+      this.user.loggedIn = true;
+    } else {
+      this.user.loggedIn = false;
+      this.user.data = {};
+      console.log(this.user.loggedIn);
+    }
+    document.querySelector("#nav-link-contact").classList.add("active");
   },
 
   firestore: {
-    productos : db.collection("Productos"),
-  }
-}
+    productos: db.collection("Productos"),
+  },
+};
 </script>
 
 <style scoped lang="scss">

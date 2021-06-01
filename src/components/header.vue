@@ -1,46 +1,70 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <router-link to="/">
-      <img src="../assets/rafiki.png" />
-    </router-link>
-    <button
-      class="navbar-toggler navbar-dark"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <div v-if="user.loggedIn" class="mr-auto email">
-        {{ user.data.email }}
+  <section>
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <router-link to="/">
+        <img src="../assets/rafiki.png" />
+      </router-link>
+      <button
+        class="navbar-toggler navbar-dark"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div v-if="user.loggedIn" class="mr-auto email">
+          {{ email }}
+        </div>
+        <div v-else class="mr-auto"></div>
+        <i
+          v-if="!admin"
+          @click="cestita()"
+          class="fa fa-shopping-cart"
+          aria-hidden="true"
+          ><span class="inside-i">Carrito</span></i
+        >
+        <i v-else @click="administrador()" class="fa fa-lock" aria-hidden="true"
+          ><span class="inside-i">Administrador</span></i
+        >
+        <i
+          @click="userProfile()"
+          v-if="!user.loggedIn"
+          class="fa fa-user-circle-o"
+          aria-hidden="true"
+          ><span class="inside-i">Iniciar sesión</span></i
+        >
+        <i v-else @click="logout()" class="fa fa-sign-out" aria-hidden="true"
+          ><span class="inside-i">Cerrar sesión</span>
+        </i>
       </div>
-      <div v-else class="mr-auto"></div>
-      <i
-        v-if="!admin"
-        @click="cestita()"
-        class="fa fa-shopping-cart"
-        aria-hidden="true"
-        ><span class="inside-i">Carrito</span></i
-      >
-      <i v-else @click="administrador()" class="fa fa-lock" aria-hidden="true"
-        ><span class="inside-i">Administrador</span></i
-      >
-      <i
-        @click="userProfile()"
-        v-if="!user.loggedIn"
-        class="fa fa-user-circle-o"
-        aria-hidden="true"
-        ><span class="inside-i">Iniciar sesión</span></i
-      >
-      <i v-else @click="logout()" class="fa fa-sign-out" aria-hidden="true"
-        ><span class="inside-i">Cerrar sesión</span>
-      </i>
+    </nav>
+    <div class="botHeader">
+      <ul class="nav nav-tabs nav-fill">
+        <li class="nav-item" @click="toHome()">
+          <a class="nav-link" id="nav-link-home" aria-current="page">Inicio</a>
+        </li>
+        <li class="nav-item" @click="toProducts()">
+          <a class="nav-link" id="nav-link-products" aria-current="page"
+            >Productos</a
+          >
+        </li>
+        <li class="nav-item" @click="toContact()">
+          <a class="nav-link" id="nav-link-contact" aria-current="page"
+            >Contacto</a
+          >
+        </li>
+        <li class="nav-item" @click="toAboutUs()">
+          <a class="nav-link" id="nav-link-aboutUs" aria-current="page"
+            >Nosotros</a
+          >
+        </li>
+      </ul>
     </div>
-  </nav>
+  </section>
 </template>
 
 <script>
@@ -56,7 +80,9 @@ export default {
         loggedIn: false,
         data: {},
       },
+      email: null,
       admin: false,
+      isActive: false,
     };
   },
   methods: {
@@ -70,6 +96,7 @@ export default {
             type: "error",
             text: "Se ha cerrado sesión. ",
           });
+          localStorage.setItem("userEmail", "");
           if (this.$route.name != "home") {
             this.$router.push({ name: "home" });
           }
@@ -84,6 +111,26 @@ export default {
     userProfile() {
       this.$router.push({ name: "login" });
     },
+    toHome() {
+      if (this.$route.name != "home") {
+        this.$router.push({ name: "home" });
+      }
+    },
+    toProducts() {
+      if (this.$route.name != "productList") {
+        this.$router.push({ name: "productList" });
+      }
+    },
+    toContact() {
+      if (this.$route.name != "contact") {
+        this.$router.push({ name: "contact" });
+      }
+    },
+    toAboutUs() {
+      if (this.$route.name != "aboutUs") {
+        this.$router.push({ name: "aboutUs" });
+      }
+    },
     cestita() {
       if (this.user.loggedIn == false) {
         this.$notify({
@@ -97,20 +144,18 @@ export default {
     },
   },
   created: function () {
+    this.email = localStorage.getItem("userEmail");
     Firebase.auth.onAuthStateChanged((user) => {
       if (user) {
         this.user.loggedIn = true;
-        this.user.data = user;
-        console.log(this.user.loggedIn);
-        if (this.user.data.email == "admin@admin.com") {
+        if (this.email == "admin@admin.com") {
           this.admin = true;
         }
-        //console.log(Firebase.auth.currentUser);
       } else {
         this.user.loggedIn = false;
+        localStorage.setItem("userEmail", "");
         this.user.data = {};
         this.admin = false;
-        console.log(this.user.loggedIn);
       }
     });
   },
@@ -118,5 +163,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "../scss/component/_header.scss";
+@import "../scss/component/_header.scss";
 </style>
