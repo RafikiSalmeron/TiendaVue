@@ -1,13 +1,14 @@
 <template>
   <div id="productsList">
     <Header />
-    <h2>LISTA PRODUCTOS</h2>
+    <Productos :productos="productos" />
     <Footer />
   </div>
 </template>
 
 <script>
 import Header from "./header.vue";
+import Productos from "./productos.vue";
 import Footer from "./footer.vue";
 
 import { db } from "../db";
@@ -17,6 +18,7 @@ export default {
 
   components: {
     Header,
+    Productos,
     Footer,
   },
   data() {

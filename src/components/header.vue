@@ -20,16 +20,32 @@
           {{ email }}
         </div>
         <div v-else class="mr-auto"></div>
-        <i
-          v-if="!admin"
-          @click="cestita()"
-          class="fa fa-shopping-cart"
-          aria-hidden="true"
-          ><span class="inside-i">Carrito</span></i
-        >
-        <i v-else @click="administrador()" class="fa fa-lock" aria-hidden="true"
-          ><span class="inside-i">Administrador</span></i
-        >
+        <div v-if="user.loggedIn" class="carroPerfil">
+          <i
+            v-if="!admin"
+            @click="cestita()"
+            class="fa fa-shopping-cart"
+            aria-hidden="true"
+            ><span class="inside-i">Carrito</span></i
+          >
+          <i
+            v-else
+            @click="administrador()"
+            class="fa fa-lock"
+            aria-hidden="true"
+            ><span class="inside-i">Administrador</span></i
+          >
+          <i
+            @click="toProfile()"
+            v-if="$route.name != 'profile' && !admin"
+            class="fa fa-user-circle"
+            aria-hidden="true"
+            ><span class="inside-i">Perfil</span></i
+          >
+          <i v-else @click="logout()" class="fa fa-sign-out" aria-hidden="true"
+            ><span class="inside-i">Cerrar sesión</span>
+          </i>
+        </div>
         <i
           @click="userProfile()"
           v-if="!user.loggedIn"
@@ -37,9 +53,6 @@
           aria-hidden="true"
           ><span class="inside-i">Iniciar sesión</span></i
         >
-        <i v-else @click="logout()" class="fa fa-sign-out" aria-hidden="true"
-          ><span class="inside-i">Cerrar sesión</span>
-        </i>
       </div>
     </nav>
     <div class="botHeader">
@@ -82,7 +95,6 @@ export default {
       },
       email: null,
       admin: false,
-      isActive: false,
     };
   },
   methods: {
@@ -106,7 +118,9 @@ export default {
         });
     },
     administrador() {
-      this.$router.push({ name: "admin" });
+      if (this.$route.name != "admin") {
+        this.$router.push({ name: "admin" });
+      }
     },
     userProfile() {
       this.$router.push({ name: "login" });
@@ -119,6 +133,11 @@ export default {
     toProducts() {
       if (this.$route.name != "productList") {
         this.$router.push({ name: "productList" });
+      }
+    },
+    toProfile() {
+      if (this.$route.name != "profile") {
+        this.$router.push({ name: "profile" });
       }
     },
     toContact() {
@@ -145,6 +164,7 @@ export default {
   },
   created: function () {
     this.email = localStorage.getItem("userEmail");
+    console.log(this.$route.name);
     Firebase.auth.onAuthStateChanged((user) => {
       if (user) {
         this.user.loggedIn = true;

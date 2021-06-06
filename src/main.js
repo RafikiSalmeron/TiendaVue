@@ -37,6 +37,9 @@ Vue.component(Profile)
 import Register from './components/register.vue'
 Vue.component(Register)
 
+import ProductDetail from './components/productDetail.vue'
+Vue.component(ProductDetail)
+
 import ProductsList from './components/productsList.vue'
 Vue.component(ProductsList)
 
@@ -51,6 +54,7 @@ const routes = [
   { path: '/contact', name: 'contact', component: Contact },
   { path: '/profile', name: 'profile', component: Profile },
   { path: '/register', name: 'register', component: Register },
+  { path: '/productDetail/:id', name: 'productDetail', component: ProductDetail },
   { path: '/productsList', name: 'productList', component: ProductsList },
 ]
 

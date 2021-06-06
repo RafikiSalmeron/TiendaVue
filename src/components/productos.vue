@@ -1,14 +1,30 @@
 <template>
   <div id="productos-main-container">
+    <!-- Buscador y botón de filtro  -->
+    <div id="searcher" class="input-group d-flex justify-content-center">
+      <div class="btn-group col-10 d-flex align-items-center">
+        <input
+          type="text"
+          class="form-control"
+          name=""
+          id="searchInput"
+          v-model="filterSearch"
+          aria-describedby="helpId"
+          placeholder="Buscar..."
+        />
+      </div>
+    </div>
     <h2>Productos</h2>
     <div class="productos-container">
       <div
         class="produc-card"
-        v-for="producto in productos"
+        v-for="producto in productosFilter"
         v-bind:key="producto.id"
         v-cloak
       >
-        <img :src="producto.img" alt="Producto Novedad" />
+        <router-link v-bind:to="`/productDetail/${producto.id}`">
+          <img :src="producto.img" alt="Producto Novedad" />
+        </router-link>
         <p class="bold">{{ producto.Nombre }}</p>
         <p class="descripcion">{{ producto.descripcion }}</p>
         <p class="bold precio">{{ producto.Precio }} €</p>
@@ -34,12 +50,47 @@ import { db } from "../db";
 
 export default {
   name: "Productos",
+  data() {
+    return {
+      user: {
+        loggedIn: false,
+        data: {},
+      },
+      email: "",
+      admin: false,
+      carrito: [],
+      cesta: null,
+      hay: false,
+      filterSearch: "",
+    };
+  },
   props: {
     productos: {
       type: Array,
       default: function () {
         return [];
       },
+    },
+  },
+  computed: {
+    productosFilter: function () {
+      // Si el input de búsqueda está vacío devuelve el array de suplementos
+      if (this.filterSearch == "") {
+        return this.productos;
+        // Si no está vacío
+      } else {
+        // Devuelve el array aplicando el filtro
+        return this.productos.filter((obj) => {
+          if (
+            obj.Nombre.toLowerCase().indexOf(this.filterSearch.toLowerCase()) >=
+            0
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+      }
     },
   },
   methods: {
@@ -107,19 +158,6 @@ export default {
         });
       }
     },
-  },
-  data() {
-    return {
-      user: {
-        loggedIn: false,
-        data: {},
-      },
-      email: "",
-      admin: false,
-      carrito: [],
-      cesta: null,
-      hay: false,
-    };
   },
   firestore: {
     carrito: db.collection("Carrito"),

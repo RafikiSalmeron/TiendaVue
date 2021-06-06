@@ -221,7 +221,6 @@ export default {
   mounted: function () {
     this.email = localStorage.getItem("userEmail");
     if (this.email) {
-      console.log("ENTRA");
       if (this.email != "admin@admin.com") {
         this.$notify({
           title: "Inicio de Sesión",

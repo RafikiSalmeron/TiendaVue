@@ -103,6 +103,10 @@ export default {
           });
         db.collection("Carrito").doc(item.id).delete();
       }
+      db.collection("Pedidos").add({
+        email: this.email,
+        pedido: this.carrito,
+      });
       this.$notify({
         title: "Pedido realizado",
         type: "success",
